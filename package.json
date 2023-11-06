@@ -5,7 +5,6 @@
   "author": "Lý Tại Trường",
   "license": "MIT",
   "private": true,
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/lytaitruong/nestjs-microservice-boilerplate.git"
