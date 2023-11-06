@@ -16,4 +16,4 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/user-api-e2e',
-};
+}
