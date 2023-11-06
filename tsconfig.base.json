@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@libs/prisma-user": ["libs/prisma-user/src/index.ts"],
       "@libs/types": ["libs/types/src/index.ts"]
     }
   },

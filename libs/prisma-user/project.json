@@ -1,0 +1,15 @@
+{
+  "name": "prisma-user",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prisma-user/src",
+  "projectType": "library",
+  "targets": {
+    "generate": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "libs/prisma-user"
+      }
+    }
+  },
+  "tags": []
+}
