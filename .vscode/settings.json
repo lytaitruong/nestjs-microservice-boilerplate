@@ -1,9 +1,5 @@
 {
-  "cSpell.words": [
-    "Buildable",
-    "commitlint",
-    "Parens"
-  ],
+  "cSpell.words": ["Buildable", "commitlint", "Parens"],
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
