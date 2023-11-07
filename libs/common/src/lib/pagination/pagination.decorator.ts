@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Type as TypeClass, applyDecorators } from '@nestjs/common'
 import { ApiExtraModels, ApiOkResponse, ApiPropertyOptional, ApiPropertyOptions, getSchemaPath } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
@@ -25,12 +26,12 @@ export const ApiPaginateRes = <ResDto extends TypeClass<unknown>>(resDTO: ResDto
   )
 }
 
-export const IsLargeThan = <T>(property: keyof T, validationOptions?: ValidationOptions) => {
-  return (object: any, propertyName: string) => {
+export const IsLargeThan = <T>(property: keyof T, validationOptions?: ValidationOptions): PropertyDecorator => {
+  return (object: object, propertyName: string | symbol) => {
     registerDecorator({
       name: 'isLargeThan',
       target: object.constructor,
-      propertyName,
+      propertyName: propertyName as string,
       constraints: [property],
       options: validationOptions,
       validator: {
@@ -39,7 +40,7 @@ export const IsLargeThan = <T>(property: keyof T, validationOptions?: Validation
         },
 
         defaultMessage(args: ValidationArguments) {
-          const [constraintProperty]: (() => any)[] = args.constraints
+          const [constraintProperty]: (() => string)[] = args.constraints
           return `${args.property} must be large than ${constraintProperty}`
         },
       },
@@ -47,12 +48,12 @@ export const IsLargeThan = <T>(property: keyof T, validationOptions?: Validation
   }
 }
 
-export const IsSorted = <T>(property: T[], validationOptions?: ValidationOptions) => {
-  return (object: any, propertyName: string) => {
+export const IsSorted = <T>(property: T[], validationOptions?: ValidationOptions): PropertyDecorator => {
+  return (object: object, propertyName: string | symbol) => {
     registerDecorator({
       name: 'isSorted',
       target: object.constructor,
-      propertyName,
+      propertyName: propertyName as string,
       constraints: [property],
       options: validationOptions,
       validator: {
