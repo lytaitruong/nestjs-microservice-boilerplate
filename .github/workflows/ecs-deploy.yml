@@ -1,0 +1,22 @@
+name: Build to ECR and Deployment to ECS
+
+on:
+  push:
+    branches:
+      - development
+      - uat
+      - production
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  get-affected:
+    name: Apps Nx Monorepo Affected
+    uses: ./.github/workflows/call-affected.yml
+    with:
+      branch-name: ${{ env.BRANCH_NAME }}
