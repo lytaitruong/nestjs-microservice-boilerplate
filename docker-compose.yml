@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  user-api:
+    container_name: user-api
+    restart: always
+    ports:
+      - 3001:3001
+    build:
+      context: .
+      dockerfile: ./apps/user-api/Dockerfile
+    env_file: .env
+    networks:
+      - nestjs-microservice-api
+      - nestjs-microservice-user-postgresql
+      - nestjs-microservice-cache
+    depends_on:
+      - user_postgresql
+      - redis
+
+  user_postgresql:
+    container_name: user_postgresql
+    restart: always
+    image: postgres:16
+    ports:
+      - '3101:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_USER_DATABASE}
+    networks:
+      - nestjs-microservice-user-postgresql
+    volumes:
+      - user_volume:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    restart: always
+    image: redis:7.2
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass $IOREDIS_PASSWORD --appendonly yes
+    env_file: .env
+    networks:
+      - nestjs-microservice-cache
+    volumes:
+      - redis_volume:/data
+
+  redis-commaner:
+    container_name: redis-commaner
+    restart: always
+    image: rediscommander/redis-commander:latest
+    ports:
+      - '8081:8081'
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${IOREDIS_PASSWORD}
+    env_file: .env
+    networks:
+      - nestjs-microservice-cache
+    depends_on:
+      - redis
+
+networks:
+  nestjs-microservice-api:
+    driver: bridge
+  nestjs-microservice-user-postgresql:
+    driver: bridge
+  nestjs-microservice-cache:
+    driver: bridge
+
+volumes:
+  redis_volume:
+  user_volume:

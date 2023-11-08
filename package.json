@@ -23,10 +23,10 @@
     "serve:user-api": "nx serve user-api",
     "test:user-api": "nx test user-api",
     "e2e:user-api": "nx e2e user-api-e2e",
-    "generate:user-data": "bun prisma generate --schema libs/prisma-user/prisma/schema.prisma",
-    "create:user-data": "bun prisma migrate dev --schema libs/prisma-user/prisma/schema.prisma",
-    "deploy:user-data": "bun prisma migrate deploy --schema libs/prisma-user/prisma/schema.prisma",
-    "studio:user-data": "bun prisma studio --schema libs/prisma-user/prisma/schema.prisma",
+    "generate:user-data": "npx prisma generate --schema libs/prisma-user/prisma/schema.prisma",
+    "create:user-data": "npx prisma migrate dev --schema libs/prisma-user/prisma/schema.prisma",
+    "deploy:user-data": "npx prisma migrate deploy --schema libs/prisma-user/prisma/schema.prisma",
+    "studio:user-data": "npx prisma studio --schema libs/prisma-user/prisma/schema.prisma",
     "format:write": "nx format:write",
     "format:check": "nx format:check",
     "commit": "cz",
@@ -57,7 +57,9 @@
     "fastify": "^4.24.3",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "nestjs-pino": "^3.5.0",
     "passport-jwt": "^4.0.1",
+    "pino-pretty": "^10.2.3",
     "prisma": "^5.5.2",
     "prisma-pagination": "^0.2.3",
     "reflect-metadata": "^0.1.13",
@@ -86,7 +88,6 @@
     "@types/passport-jwt": "^3.0.13",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "bun-types": "^1.0.9",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "~8.46.0",
@@ -103,14 +104,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && bun run build",
-      "prepare-commit-msg": "exec < /dev/tty && bun cz --hook || true"
+      "pre-commit": "lint-staged && pnpm run build",
+      "prepare-commit-msg": "exec < /dev/tty && pnpm cz --hook || true"
     }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
-      "bun nx format:write --uncommitted"
+      "pnpm nx format:write --uncommitted"
     ]
   },
   "config": {
@@ -119,7 +120,6 @@
     }
   },
   "engines": {
-    "bun": ">= 1.0",
     "node": ">= 18",
     "nest": ">= 10",
     "jest": ">= 29",

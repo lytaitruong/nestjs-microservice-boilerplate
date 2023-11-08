@@ -1,0 +1,7 @@
+*
+!package.json
+!pnpm-lock.yaml
+!tsconfig.base.json
+!apps/**
+!libs/**
+!nx.json
