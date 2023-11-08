@@ -4,9 +4,9 @@ import { Env, IConfigCommon } from './common.interface'
 export const configuration = (): IConfigCommon => ({
   env: (process.env['NODE' + '_ENV'] as Env) || Env.DEFAULT,
   app: {
-    port: process.env.APP_PORT ? +process.env.APP_PORT : 3000,
+    port: process.env.APP_PORT ? +process.env.APP_PORT : 3001,
     version: process.env.APP_VERSION || 'v1',
-    service: process.env.APP_SERVICE || 'NestJS Boilerplate',
+    service: process.env.APP_SERVICE || 'User Service',
     whitelist: typeof process.env.APP_WHITELIST === 'string' ? process.env.APP_WHITELIST.split(',') : '*',
   },
   cookie: {

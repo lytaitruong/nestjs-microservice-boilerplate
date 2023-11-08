@@ -33,6 +33,6 @@ WORKDIR /usr/src/app
 
 COPY --from=remover /usr/src/app ./
 
-EXPOSE 3333
+EXPOSE 3001
 
 CMD ["node", "dist/apps/user-api/main.js"]
