@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["Buildable", "commitlint", "DDTHH", "gstatic", "jsdelivr", "metatype", "Parens"],
+  "cSpell.words": ["Buildable", "commitlint", "DDTHH", "gstatic", "jsdelivr", "jwtid", "MAXAGE", "metatype", "Parens"],
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
