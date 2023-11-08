@@ -1,5 +1,5 @@
-import { Pag, Res } from '@libs/common'
-import { Readable } from 'stream'
+import type { Pag, Res } from '@libs/common'
+import type { Readable } from 'stream'
 
 export type Str = { name: string; data: Readable }
 export interface IRestService<Result, Create, Update, Params, Query, Info> {

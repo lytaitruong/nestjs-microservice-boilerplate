@@ -1,5 +1,5 @@
 import { IPaginationRes } from '@libs/types'
-import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
+import type { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
 import { PaginatedResult } from 'prisma-pagination'
 import { Observable, map } from 'rxjs'
 
