@@ -18,6 +18,23 @@ services:
       - user_postgresql
       - redis
 
+  book-api:
+    container_name: book-api
+    restart: always
+    ports:
+      - 3002:3002
+    build:
+      context: .
+      dockerfile: ./apps/book-api/Dockerfile
+    env_file: ./apps/book-api/.env
+    networks:
+      - nestjs-microservice-api
+      - nestjs-microservice-book-postgresql
+      - nestjs-microservice-cache
+    depends_on:
+      - book_postgresql
+      - redis
+
   user_postgresql:
     container_name: user_postgresql
     restart: always
@@ -32,6 +49,21 @@ services:
       - nestjs-microservice-user-postgresql
     volumes:
       - user_volume:/var/lib/postgresql/data
+
+  book_postgresql:
+    container_name: book_postgresql
+    restart: always
+    image: postgres:16
+    ports:
+      - '3102:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE_BOOK}
+    networks:
+      - nestjs-microservice-book-postgresql
+    volumes:
+      - book_volume:/var/lib/postgresql/data
 
   redis:
     container_name: redis
@@ -67,9 +99,12 @@ networks:
     driver: bridge
   nestjs-microservice-user-postgresql:
     driver: bridge
+  nestjs-microservice-book-postgresql:
+    driver: bridge
   nestjs-microservice-cache:
     driver: bridge
 
 volumes:
   redis_volume:
   user_volume:
+  book_volume:
