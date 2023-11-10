@@ -18,6 +18,7 @@
       "@libs/base": ["libs/base/src/index.ts"],
       "@libs/common": ["libs/common/src/index.ts"],
       "@libs/guard": ["libs/guard/src/index.ts"],
+      "@libs/prisma-book": ["libs/prisma-book/src/index.ts"],
       "@libs/prisma-user": ["libs/prisma-user/src/index.ts"],
       "@libs/types": ["libs/types/src/index.ts"]
     }

@@ -1,0 +1,15 @@
+{
+  "name": "prisma-book",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prisma-book/src",
+  "projectType": "library",
+  "targets": {
+    "generate": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "libs/prisma-book"
+      }
+    }
+  },
+  "tags": []
+}
