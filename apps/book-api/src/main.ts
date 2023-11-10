@@ -13,7 +13,7 @@ import {
   helmetSetting,
   uploadSetting,
 } from '@libs/common'
-import { PrismaClientExceptionFilter } from '@libs/prisma-user'
+import { PrismaClientExceptionFilter } from '@libs/prisma-book'
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
