@@ -1,5 +1,5 @@
 {
-  "name": "user-api-e2e",
+  "name": "user-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": ["user-api"],
   "projectType": "application",
@@ -8,7 +8,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
       "options": {
-        "jestConfig": "apps/user-api-e2e/jest.config.ts",
+        "jestConfig": "apps/user-e2e/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -16,7 +16,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/user-api-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": ["apps/user-e2e/**/*.{js,ts}"]
       }
     }
   }

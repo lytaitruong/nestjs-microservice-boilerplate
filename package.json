@@ -22,7 +22,7 @@
     "build:user-api": "nx build user-api",
     "serve:user-api": "nx serve user-api",
     "test:user-api": "nx test user-api",
-    "e2e:user-api": "nx e2e user-api-e2e",
+    "test:user-e2e": "nx e2e user-e2e",
     "generate:user-data": "npx prisma generate --schema libs/prisma-user/prisma/schema.prisma",
     "create:user-data": "npx prisma migrate dev --schema libs/prisma-user/prisma/schema.prisma",
     "deploy:user-data": "npx prisma migrate deploy --schema libs/prisma-user/prisma/schema.prisma",

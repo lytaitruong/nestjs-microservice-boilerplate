@@ -62,7 +62,7 @@ async function bootstrap() {
   // EXIT
   app.enableShutdownHooks()
   // START
-  await app.listen(port, '0.0.0.0')
-  logger.log(`🚀 Application is running on: http://localhost:${port}/api/${version}`)
+  await app.listen(port)
+  logger.log(`🚀 Application is running on: http://${localhost}:${port}/api/${version}`)
 }
 bootstrap()
