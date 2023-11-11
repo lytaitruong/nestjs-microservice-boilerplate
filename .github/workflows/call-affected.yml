@@ -1,27 +1,29 @@
-name: Get Affected from Nx monorepo affected command
-
+name: NX Monorepo Affected
 on:
   workflow_call:
     inputs:
-      branch-name:
+      main-branch-name:
         type: string
         required: true
     outputs:
-      apps:
-        description: 'Apps Affected when code change'
-        value: ${{ jobs.get-affected.outputs.apps }}
+      services:
+        description: 'Service has been affected by PR change'
+        value: ${{ jobs.get-affected.outputs.matrix }}
 
 jobs:
   get-affected:
+    timeout-minutes: 10
     runs-on: self-hosted
     outputs:
-      apps: ${{ steps.set-matrix.outputs.apps }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2.4.0
         with:
           version: '8.x'
 
@@ -36,11 +38,12 @@ jobs:
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
+        id: setSHAs
         with:
-          main-branch-name: ${{ inputs.branch-name }}
+          main-branch-name: ${{ inputs.main-branch-name }}
 
-      - name: Build affected projects in nx workspace and output array
+      - name: Identify affected projects
         id: set-matrix
         run: |
-          MATRIX=(`./node_modules/.bin/nx affected:apps --plain --base=$NX_BASE --head=$NX_HEAD`)
-          echo "apps=$(jq --compact-output --null-input '$ARGS.positional' --args "${MATRIX[@]}")" >> "$GITHUB_OUTPUT"
+          AFFECTED=(`pnpm nx show projects --affected --with-target build --plain --base=$NX_BASE --head=$NX_HEAD`)
+          echo "matrix=$(jq --compact-output --null-input '$ARGS.positional' --args "${AFFECTED[@]}")" >> "$GITHUB_OUTPUT"

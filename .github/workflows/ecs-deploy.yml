@@ -8,15 +8,13 @@ on:
       - production
 
 permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
-
-env:
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  id-token: write
+  contents: read
+  actions: read
 
 jobs:
   get-affected:
-    name: Apps Nx Monorepo Affected
+    name: Nx Monorepo Affected
     uses: ./.github/workflows/call-affected.yml
     with:
-      branch-name: ${{ env.BRANCH_NAME }}
+      main-branch-name: ${{ github.head_ref || github.ref_name }}

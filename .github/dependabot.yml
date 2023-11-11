@@ -7,3 +7,5 @@ updates:
     target-branch: 'development'
     labels:
       - 'upgrade dependencies'
+    open-pull-requests-limit: 10
+    schedule-timezone: 'Asia/Singapore'
