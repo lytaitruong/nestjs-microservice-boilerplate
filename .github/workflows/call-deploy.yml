@@ -1,0 +1,103 @@
+name: Build ECR and Deploy ECS
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      project:
+        type: string
+        required: true
+      service:
+        type: string
+        required: true
+    secrets:
+      aws-iam-role-assume:
+        required: true
+
+jobs:
+  build-image:
+    timeout-minutes: 10
+    runs-on: self-hosted
+    outputs:
+      ecr-image: ${{ steps.metadata-ecr.outputs.name }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-session-name: OIDCSession
+          role-to-assume: ${{ secrets.aws-iam-role-assume }}
+          aws-region: ap-southeast-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Generate metadata ECR
+        id: metadata-ecr
+        run: |
+          echo "name=${{ steps.login-ecr.outputs.registry }}/${{ inputs.project }}-${{ inputs.service }}-${{ inputs.environment }}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build Docker Image to Amazon ECR
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/${{ inputs.service }}/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          platforms: linux/arm64
+          push: true
+          provenance: false
+          tags: ${{ steps.metadata-ecr.outputs.name }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  deploy:
+    if: needs.build-image.result == 'success'
+    needs: [build-image]
+    timeout-minutes: 10
+    runs-on: self-hosted
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-session-name: OIDCSession
+          role-to-assume: ${{ secrets.aws-iam-role-assume }}
+          aws-region: ap-southeast-1
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ./.aws/${{ inputs.environment }}/task-definition-${{ inputs.service }}.json
+          container-name: '${{ inputs.project }}-${{ inputs.service }}-${{ inputs.environment }}'
+          image: ${{ needs.build-image.outputs.ecr-image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ inputs.project }}-${{ inputs.service }}-${{ inputs.environment }}
+          cluster: ${{ inputs.project }}-cluster-${{ inputs.environment }}
+          wait-for-service-stability: true

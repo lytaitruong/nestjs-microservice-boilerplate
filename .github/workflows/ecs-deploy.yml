@@ -18,3 +18,20 @@ jobs:
     uses: ./.github/workflows/call-affected.yml
     with:
       main-branch-name: ${{ github.head_ref || github.ref_name }}
+
+  deploy:
+    needs: [get-affected]
+    if: ${{ !contains(needs.get-affected.outputs.services, '[]') }}
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        service: ${{ fromJson(needs.get-affected.outputs.services) }}
+        node-version: [20]
+    uses: ./.github/workflows/call-deploy.yml
+    with:
+      project: 'nestjs'
+      service: ${{ matrix.service }}
+      environment: ${{ github.head_ref || github.ref_name }}
+    secrets:
+      aws-iam-role-assume: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
