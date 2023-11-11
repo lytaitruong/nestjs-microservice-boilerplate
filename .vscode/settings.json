@@ -1,5 +1,19 @@
 {
-  "cSpell.words": ["Buildable", "commitlint", "DDTHH", "gstatic", "jsdelivr", "jwtid", "MAXAGE", "metatype", "Parens"],
+  "cSpell.words": [
+    "awslogs",
+    "awsvpc",
+    "Buildable",
+    "commitlint",
+    "DDTHH",
+    "FARGATE",
+    "gstatic",
+    "jsdelivr",
+    "jwtid",
+    "MAXAGE",
+    "metatype",
+    "Parens",
+    "ulimits"
+  ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
